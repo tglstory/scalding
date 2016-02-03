@@ -24,7 +24,7 @@ val algebirdVersion = "0.12.0"
 val apacheCommonsVersion = "2.2"
 >>>>>>> Bump algebird, bijection
 val avroVersion = "1.7.4"
-val bijectionVersion = "0.9.0"
+val bijectionVersion = "0.9.1"
 val cascadingAvroVersion = "2.1.2"
 val chillVersion = "0.7.3"
 val elephantbirdVersion = "4.8"
