@@ -826,8 +826,8 @@ object Boxed {
         val untypedRes = Option(boxedCache.get(cls)) match {
           case Some(r) => r
           case None =>
-            val r = next[K]()
-            boxedCache.putIfAbsent(cls, r.asInstanceOf[(Any => Boxed[Any], Class[Boxed[Any]])])
+            val r = next[Any]()
+            boxedCache.putIfAbsent(cls, r)
             r
         }
         untypedRes.asInstanceOf[(K => Boxed[K], Class[Boxed[K]])]
@@ -837,6 +837,7 @@ object Boxed {
   def next[K](): (K => Boxed[K], Class[Boxed[K]]) = boxes.get match {
     case list @ (h :: tail) if boxes.compareAndSet(list, tail) =>
       h.asInstanceOf[(K => Boxed[K], Class[Boxed[K]])]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     case (h :: tail) => next[K] // Try again
@@ -853,6 +854,9 @@ object Boxed {
 =======
     case (h :: tail) => next[K] // Try again
 >>>>>>> Review comments
+=======
+    case (h :: tail) => next[K]() // Try again
+>>>>>>> More review comments/fixes
     case Nil => sys.error("Exhausted the boxed classes")
 >>>>>>> Cache Boxed classes
   }
