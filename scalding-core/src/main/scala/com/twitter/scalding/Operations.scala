@@ -238,7 +238,7 @@ package com.twitter.scalding {
     }
 
     private[this] def mergeTraversableOnce[K, V: Semigroup](items: TraversableOnce[(K, V)]): Map[K, V] = {
-      val mutable = MMap[K, V]()
+      val mutable = scala.collection.mutable.OpenHashMap[K, V]() // Scala's OpenHashMap seems faster than Java and Scala's HashMap Impl's
       val innerIter = items.toIterator
       while (innerIter.hasNext) {
         val (k, v) = innerIter.next
@@ -327,7 +327,7 @@ package com.twitter.scalding {
 
     def putAll(kvs: Map[K, V]): Option[Map[K, V]] = {
       val (curHits, evicted) = summingCache.putWithHits(kvs)
-      misses.increment(1 - curHits)
+      misses.increment(kvs.size - curHits)
       hits.increment(curHits)
 
       if (evicted.isDefined)
@@ -368,7 +368,7 @@ package com.twitter.scalding {
 
     def putAll(kvs: Map[K, V]): Option[Map[K, V]] = {
       val (stats, evicted) = adaptiveCache.putWithStats(kvs)
-      misses.increment(1 - stats.hits)
+      misses.increment(kvs.size - stats.hits)
       hits.increment(stats.hits)
       capacity.increment(stats.cacheGrowth)
       sentinel.increment(stats.sentinelGrowth)
